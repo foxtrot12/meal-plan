@@ -41,17 +41,22 @@ const MealPlanner: React.FC = () => {
     setLunchPlan(newLunchPlan);
     setDinnerPlan(newDinnerPlan);
 
-    // Calculate total ingredients
-    const allIngredients: number[] = newLunchPlan.reduce((acc, curr) => {
-      return acc.concat(curr.ingredients);
-    }, []);
+    // Calculate total ingredients without duplicates
+    const allIngredientsSet: Set<number> = new Set<number>();
 
-    newDinnerPlan.forEach((dish) => {
+    newLunchPlan.forEach((dish) => {
       dish.ingredients.forEach((ingredient) => {
-        allIngredients.push(ingredient);
+        allIngredientsSet.add(ingredient);
       });
     });
 
+    newDinnerPlan.forEach((dish) => {
+      dish.ingredients.forEach((ingredient) => {
+        allIngredientsSet.add(ingredient);
+      });
+    });
+
+    const allIngredients: number[] = Array.from(allIngredientsSet);
     setTotalIngredients(allIngredients);
   };
 
